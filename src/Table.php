@@ -16,6 +16,8 @@ class Table
 
     private $columns = [];
     private $sortables = [];
+    private $filters = [];
+    private $preparedFilters = [];
     private $model;
     private $theme;
     private $rows;
@@ -24,6 +26,7 @@ class Table
     private $rowViewPath;
     private $orderField = 'id';
     private $orderDirection = 'asc';
+    private $filtersAreActive = false;
 
     public static function from($model)
     {
@@ -51,6 +54,13 @@ class Table
         return $this;
     }
 
+    public function filters($filters = [])
+    {
+        $this->filters = $filters;
+
+        return $this;
+    }
+
     public function orderBy($field, $direction = 'asc')
     {
         $this->orderField = $field;
@@ -68,14 +78,43 @@ class Table
 
     protected function prepareModelResults()
     {
-        $model = $this->model;
-        $model = $this->filterModelResults($model);
-        $result = $model->paginate($this->itemsPerPage);
+        $this->filterModelResults($this->model);
+        $this->sortModelResults($this->model);
+
+        $result = $this->model->paginate($this->itemsPerPage);
         $this->rows = $result;
         $this->pagination = $result->links();
     }
 
-    protected function filterModelResults($model) {
+    protected function prepareModelFilters()
+    {
+        $filters = [];
+        foreach ($this->filters as $name => $type) {
+            $filter = Filter::make($type, $name);
+            $filter->label(array_get($this->columns, $name))
+                ->theme($this->theme);
+
+            $filters[] = $filter;
+        }
+
+        $this->preparedFilters = $filters;
+
+        return $filters;
+    }
+
+    protected function filterModelResults($model)
+    {
+        $this->prepareModelFilters();
+        foreach ($this->preparedFilters as $filter) {
+            $this->model = $filter->applyFilter($this->model);
+            if ($filter->isActive()) {
+                $this->filtersAreActive = true;
+            }
+        }
+    }
+
+    protected function sortModelResults($model)
+    {
         $model = $model->orderBy($this->orderField, $this->orderDirection);
 
         return $model;
@@ -88,7 +127,8 @@ class Table
         return $this;
     }
 
-    protected function setupTable() {
+    protected function setupTable()
+    {
         $this->orderField = Request::input('orderField', $this->orderField);
         $this->orderDirection = Request::input('orderDirection', $this->orderDirection);
 
@@ -98,13 +138,15 @@ class Table
     protected function preparedView()
     {
         return view('table::' . $this->theme . '.table', [
-            'columns'        => $this->columns,
+            'columns'          => $this->columns,
             'sortables'        => $this->sortables,
-            'rows'           => $this->rows,
-            'pagination'     => $this->pagination,
-            'rowViewPath'    => $this->rowViewPath,
-            'orderField'     => $this->orderField,
-            'orderDirection' => $this->orderDirection
+            'rows'             => $this->rows,
+            'pagination'       => $this->pagination,
+            'rowViewPath'      => $this->rowViewPath,
+            'orderField'       => $this->orderField,
+            'orderDirection'   => $this->orderDirection,
+            'filters'          => $this->preparedFilters,
+            'filtersAreActive' => $this->filtersAreActive
         ]);
     }
 
