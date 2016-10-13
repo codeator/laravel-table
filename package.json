@@ -1,0 +1,25 @@
+{
+  "name": "codeator/laravel-table",
+  "description": "Table functionality for Laravel collections",
+  "keywords": ["laravel","table","html","model","sorting","filtering"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "codeator",
+      "email": "codeator@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "laravel/framework": "5.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.5.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Codeator\\Table\\": "src/"
+    }
+  }
+}
