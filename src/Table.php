@@ -15,7 +15,7 @@ class Table
 {
 
     private $columns = [];
-    private $filters = [];
+    private $sortables = [];
     private $model;
     private $theme;
     private $rows;
@@ -44,9 +44,9 @@ class Table
         return $this;
     }
 
-    public function filters($filters = [])
+    public function sortables($sortables = [])
     {
-        $this->filters = $filters;
+        $this->sortables = $sortables;
 
         return $this;
     }
@@ -99,7 +99,7 @@ class Table
     {
         return view('table::' . $this->theme . '.table', [
             'columns'        => $this->columns,
-            'filters'        => $this->filters,
+            'sortables'        => $this->sortables,
             'rows'           => $this->rows,
             'pagination'     => $this->pagination,
             'rowViewPath'    => $this->rowViewPath,

@@ -7,7 +7,7 @@
         <tr>
             @foreach($columns as $key => $column)
                 <th>
-                    @if(in_array($key, $filters))
+                    @if(in_array($key, $sortables))
                         @if($orderField == $key)
                         <a href="?{{http_build_query(array_merge(\Request::input(), [ 'orderField' => $key, 'orderDirection' => $orderDirection == 'asc' ? 'desc' : 'asc']))}}">
                             {{$column}}
