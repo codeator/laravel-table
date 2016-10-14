@@ -107,8 +107,8 @@ class Table
     protected function prepareExporters()
     {
         if ($exporterType = \Request::input('export_to')) {
-            $exporter = Exporter::make($exporterType);
-            $exporter->export($this->model, $this->columns);
+            $exporter = Exporter::make($exporterType, $this->columns);
+            $exporter->export($this->model);
         }
     }
 
