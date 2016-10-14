@@ -35,6 +35,17 @@ class UsersTable extends Table
                 'email' => 'Email',                
                 'created_at' => 'Регистрация'
             ])
+            /*
+            For filters allowed types: string, range, date
+            */
+            ->filters([
+                'name' => 'string',
+                'email' => 'string',
+                'count_maps' => 'range',
+                'count_folders' => 'range',
+                'count_objects' => 'range',
+                'created_at' => 'date'
+            ])
             ->sortables([
                 'id'
             ])
@@ -80,4 +91,29 @@ class UsersController extends Controller
 @section('content')
     {!! $table->render() !!}
 @stop
+```
+
+###Sample Sass based on bootstrap v4
+
+```
+.table-filter {
+  margin-bottom: 20px;
+
+  .form-group {
+    width: 25%;
+    padding-left: 15px;
+    padding-right: 15px;
+    float: left;
+
+    .col-xs-6 {
+      &:first-of-type {
+        padding-right: 5px;
+      }
+
+      &:last-of-type {
+        padding-left: 5px;
+      }
+    }
+  }
+}
 ```
