@@ -18,9 +18,11 @@
                         @endif
                     @endif
                 </div>
-                {{--<div class="col-xs-6" style="text-align: right">--}}
-                    {{--<a class="btn btn-info" href="">Export to CSV</a>--}}
-                {{--</div>--}}
+                <div class="col-xs-6" style="text-align: right">
+                    @foreach($exporters as $exporter)
+                        <a target="_blank" class="btn btn-info" href="?{{http_build_query(array_merge(\Request::input(), ['export_to' => $exporter]))}}">Export to {{strtoupper($exporter)}}</a>
+                    @endforeach
+                </div>
             </div>
         </form>
 </div>
@@ -54,13 +56,17 @@
                     @endif
                 </th>
             @endforeach
+            @if(count($actions))
+                <th></th>
+            @endif
         </tr>
         </thead>
         <tbody>
         @foreach($rows as $rowData)
             @include($rowViewPath, [
                 'data' => $rowData,
-                'columns' => $columns
+                'columns' => $columns,
+                'actions' => $actions
             ])
         @endforeach
         </tbody>

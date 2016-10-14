@@ -17,7 +17,9 @@ class Table
     private $columns = [];
     private $sortables = [];
     private $filters = [];
+    private $exporters = [];
     private $preparedFilters = [];
+    private $preparedExporters = [];
     private $model;
     private $theme;
     private $rows;
@@ -27,6 +29,7 @@ class Table
     private $orderField = 'id';
     private $orderDirection = 'asc';
     private $filtersAreActive = false;
+    private $actions = [];
 
     public static function from($model)
     {
@@ -61,6 +64,20 @@ class Table
         return $this;
     }
 
+    public function exporters($exporters = [])
+    {
+        $this->exporters = $exporters;
+
+        return $this;
+    }
+
+    public function actions($actions = [])
+    {
+        $this->actions = $actions;
+
+        return $this;
+    }
+
     public function orderBy($field, $direction = 'asc')
     {
         $this->orderField = $field;
@@ -80,10 +97,19 @@ class Table
     {
         $this->filterModelResults($this->model);
         $this->sortModelResults($this->model);
+        $this->prepareExporters($this->model);
 
         $result = $this->model->paginate($this->itemsPerPage);
         $this->rows = $result;
         $this->pagination = $result->appends(\Request::input())->links();
+    }
+
+    protected function prepareExporters()
+    {
+        if ($exporterType = \Request::input('export_to')) {
+            $exporter = Exporter::make($exporterType);
+            $exporter->export($this->model);
+        }
     }
 
     protected function prepareModelFilters()
@@ -146,7 +172,9 @@ class Table
             'orderField'       => $this->orderField,
             'orderDirection'   => $this->orderDirection,
             'filters'          => $this->preparedFilters,
-            'filtersAreActive' => $this->filtersAreActive
+            'filtersAreActive' => $this->filtersAreActive,
+            'exporters'        => $this->exporters,
+            'actions'          => $this->actions
         ]);
     }
 

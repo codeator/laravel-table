@@ -49,6 +49,13 @@ class UsersTable extends Table
             ->sortables([
                 'id'
             ])
+            ->exporters(['csv'])
+            /*
+                Route name -> Link name in last column
+            */
+            ->actions([
+                'admin.users.view' => 'View'
+            ])
             ->orderBy('id', 'asc')
             ->paginate(20);
 
