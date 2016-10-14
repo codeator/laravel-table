@@ -1,6 +1,7 @@
 <?php
 
 namespace Codeator\Table\Exporter;
+use Codeator\Table\Exporter;
 
 /**
  * Created by PhpStorm.
@@ -8,7 +9,7 @@ namespace Codeator\Table\Exporter;
  * Date: 14.10.16
  * Time: 11:43
  */
-class CsvExporter
+class CsvExporter extends Exporter 
 {
 
     public function export($model) {
