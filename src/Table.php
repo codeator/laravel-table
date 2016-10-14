@@ -108,7 +108,7 @@ class Table
     {
         if ($exporterType = \Request::input('export_to')) {
             $exporter = Exporter::make($exporterType);
-            $exporter->export($this->model);
+            $exporter->export($this->model, $this->columns);
         }
     }
 

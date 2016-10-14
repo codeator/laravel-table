@@ -12,7 +12,7 @@ class CsvExporter
 {
 
     public function export($model) {
-        $results = $model->get()->toArray();
+        $results = $model->get($this->columns)->toArray();
 
         $csv = $this->toCSV($results);
 
