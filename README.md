@@ -32,7 +32,7 @@ class UsersTable extends Table
 {
 
     public static function create() {
-        $types = Role::all()->pluck('name', 'id');
+        $roles = Role::all()->pluck('name', 'id');
         $table = self::from(new User())
             ->columns([
                 'id' => 'Id',
