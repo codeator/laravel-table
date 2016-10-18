@@ -131,4 +131,17 @@ class UsersController extends Controller
     }
   }
 }
+
+//For use with materialdesignicons.com
+.table-arrow-up:before {
+  font: normal normal normal 16px/1 "Material Design Icons";
+  content: mdi('arrow-up');
+  text-decoration: none;
+}
+
+.table-arrow-down:before {
+  font: normal normal normal 16px/1 "Material Design Icons";
+  content: mdi('arrow-down');
+  text-decoration: none;
+}
 ```
