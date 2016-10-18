@@ -2,6 +2,9 @@
 Laravel module for table rendering
 
 ##Installation
+First, require the package using Composer:
+
+`composer require codeator/laravel-table`
 
 Add to your config/app.php providers section
 
@@ -21,13 +24,15 @@ and to facades section
 namespace App\Tables\Admin;
 
 use App\Models\User;
+use App\Models\Role;
 use Table;
-
+use Codeator\Table\Filter\SelectFilter;
 
 class UsersTable extends Table
 {
 
     public static function create() {
+        $types = Role::all()->pluck('name', 'id');
         $table = self::from(new User())
             ->columns([
                 'id' => 'Id',
@@ -41,6 +46,9 @@ class UsersTable extends Table
             ->filters([
                 'name' => 'string',
                 'email' => 'string',
+                'role_id' => (new SelectFilter('role_id'))
+                    ->options($roles)
+                    ->label('Роль'),
                 'count_maps' => 'range',
                 'count_folders' => 'range',
                 'count_objects' => 'range',
