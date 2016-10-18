@@ -21,6 +21,9 @@ abstract class Filter
 
     public static function make($type, $name)
     {
+        if ($type instanceof Filter) {
+            return $type;
+        }
         $filterName = 'Codeator\Table\Filter\\' . ucfirst(camel_case($type . 'Filter'));
         $filter = new $filterName($name);
 
