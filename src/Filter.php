@@ -49,7 +49,9 @@ abstract class Filter
 
     public function label($label)
     {
-        $this->label = $label;
+        if ($label) {
+            $this->label = $label;
+        }
 
         return $this;
     }
