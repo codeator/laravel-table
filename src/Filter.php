@@ -10,14 +10,14 @@ namespace Codeator\Table;
 
 use DB;
 
-
-class Filter
+abstract class Filter
 {
 
     protected $name;
     protected $label;
     protected $theme;
     protected $value;
+    protected $viewPath;
 
     public static function make($type, $name)
     {
@@ -32,6 +32,10 @@ class Filter
         $this->name($name);
         $this->prepare();
     }
+
+    protected abstract function prepare();
+
+    public abstract function applyFilter($model);
 
     public function name($name)
     {
