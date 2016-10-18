@@ -37,7 +37,8 @@ class UsersTable extends Table
             ->columns([
                 'id' => 'Id',
                 'name' => 'Имя',
-                'email' => 'Email',                
+                'email' => 'Email',
+                'balance' => 'Баланс',
                 'created_at' => 'Регистрация'
             ])
             /*
@@ -49,6 +50,11 @@ class UsersTable extends Table
                 'role_id' => (new SelectFilter('role_id'))
                     ->options($roles)
                     ->label('Роль'),
+                /*
+                You can specify settings for some of the filters.
+                Eg: price filter can take precision as the argument
+                 */
+                'balance' => 'price:4',
                 'count_maps' => 'range',
                 'count_folders' => 'range',
                 'count_objects' => 'range',

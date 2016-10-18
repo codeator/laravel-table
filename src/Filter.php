@@ -14,6 +14,7 @@ abstract class Filter
 {
 
     protected $name;
+    protected $params;
     protected $label;
     protected $theme;
     protected $value;
@@ -24,15 +25,21 @@ abstract class Filter
         if ($type instanceof Filter) {
             return $type;
         }
+        $params = [];
+        if (str_contains($type, ':')) {
+            list ($type, $params) = explode(':', $type);
+            $params = explode(',', $params);
+        }
         $filterName = 'Codeator\Table\Filter\\' . ucfirst(camel_case($type . 'Filter'));
-        $filter = new $filterName($name);
+        $filter = new $filterName($name, $params);
 
         return $filter;
     }
 
-    public function __construct($name)
+    public function __construct($name, $params = [])
     {
         $this->name($name);
+        $this->params($params);
         $this->prepare();
     }
 
@@ -43,6 +50,12 @@ abstract class Filter
     public function name($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+    public function params($params)
+    {
+        $this->params = $params;
 
         return $this;
     }

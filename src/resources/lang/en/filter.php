@@ -8,4 +8,8 @@ return [
         'from' => 'From',
         'to' => 'To',
     ],
+    'price' => [
+        'from' => 'From',
+        'to' => 'To',
+    ],
 ];
