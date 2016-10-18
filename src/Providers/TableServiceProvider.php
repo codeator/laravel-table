@@ -19,7 +19,7 @@ class TableServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(dirname(__DIR__) . '/resources/views', 'table');
         $this->publishes([
-            dirname(__DIR__) . '/resources/views' => base_path('resources/views/vendor/table'),
+            dirname(__DIR__) . '/resources/views' => resource_path('views/vendor/table'),
             dirname(__DIR__) . '/config/table.php' => config_path('table.php'),
         ]);
     }
