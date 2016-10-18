@@ -37,18 +37,15 @@
                             <a href="?{{http_build_query(array_merge(\Request::input(), [ 'orderField' => $key, 'orderDirection' => $orderDirection == 'asc' ? 'desc' : 'asc']))}}">
                                 {{$column}}
                                 @if($orderDirection == 'asc')
-                                &uarr;
-                                &nbsp;
+                                    <span class="table-arrow-up"></span>
                                 @else
-                                &darr;
-                                &nbsp;
+                                    <span class="table-arrow-down"></span>
                                 @endif
                             </a>
                         @else
                             <a href="?{{http_build_query(array_merge(\Request::input(), [ 'orderField' => $key, 'orderDirection' => 'asc']))}}">
                                 {{$column}}
-                                &uarr;
-                                &darr;
+                                <span class="table-arrow-up"></span><span class="table-arrow-down"></span>&nbsp;
                             </a>
                         @endif
                     @else
