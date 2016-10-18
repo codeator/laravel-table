@@ -54,7 +54,7 @@ class UsersTable extends Table
                 You can specify settings for some of the filters.
                 Eg: price filter can take precision as the argument
                  */
-                'balance' => 'price:4',
+                'balance' => 'price|precision:4',
                 'count_maps' => 'range',
                 'count_folders' => 'range',
                 'count_objects' => 'range',

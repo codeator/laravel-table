@@ -17,11 +17,14 @@ class PriceFilter extends Filter
     protected $viewPath = 'filters.price';
     protected $priceMultiplier = 100;
 
-    public function __construct($name, $params)
+    public function __construct($name, $precision, $multiplier = null)
     {
-        parent::__construct($name, $params);
-        if (isset($params[0])) {
-            $this->priceMultiplier = 10 ** $params[0];
+        parent::__construct($name);
+        if ($precision !== null) {
+            $this->priceMultiplier = 10 ** $precision;
+        }
+        if ($multiplier !== null) {
+            $this->priceMultiplier = $multiplier;
         }
     }
 

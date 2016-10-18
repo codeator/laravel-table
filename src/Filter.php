@@ -8,8 +8,6 @@
 
 namespace Codeator\Table;
 
-use DB;
-
 abstract class Filter
 {
 
@@ -26,20 +24,52 @@ abstract class Filter
             return $type;
         }
         $params = [];
-        if (str_contains($type, ':')) {
-            list ($type, $params) = explode(':', $type);
-            $params = explode(',', $params);
+        if (str_contains($type, '|')) {
+            list ($type, $paramString) = explode('|', $type, 2);
+            $paramPairs = explode('|', $paramString);
+            foreach ($paramPairs as $param) {
+                list($key, $valueString) = explode(':', $param);
+                $params[$key] = str_contains($valueString, ',') ? explode(',', $valueString) : $valueString;
+            }
         }
-        $filterName = 'Codeator\Table\Filter\\' . ucfirst(camel_case($type . 'Filter'));
-        $filter = new $filterName($name, $params);
+
+        $className = 'Codeator\Table\Filter\\' . ucfirst(camel_case($type . 'Filter'));
+        $params['name'] = $name;
+
+        $filter = self::createFilter($params, $className);
 
         return $filter;
     }
 
-    public function __construct($name, $params = [])
+    protected static function createFilter($params, $className)
+    {
+        $reflectionClass = new \ReflectionClass($className);
+        $preparedParams = [];
+        foreach ($reflectionClass->getConstructor()->getParameters() as $parameter) {
+            $preparedParams[$parameter->getName()] = self::exportParameterValue($params, $parameter);
+        }
+        return $reflectionClass->newInstanceArgs($preparedParams);
+    }
+
+    protected static function exportParameterValue($params, \ReflectionParameter $parameter)
+    {
+        if ($value = array_get($params, $parameter->getName())) {
+            return $value;
+        }
+        if ($parameter->isDefaultValueAvailable()) {
+            return $parameter->getDefaultValue();
+        }
+        $declaringClass = $parameter->getDeclaringClass();
+        if ($declaringClass) {
+            throw new \InvalidArgumentException(sprintf("Argument \"%s\" for filter \"%s\" is required.", $parameter->getName(), $declaringClass->getName()));
+        } else {
+            throw new \InvalidArgumentException(sprintf("Argument \"%s\" is required.", $parameter->getName()));
+        }
+    }
+
+    public function __construct($name)
     {
         $this->name($name);
-        $this->params($params);
         $this->prepare();
     }
 
@@ -50,12 +80,6 @@ abstract class Filter
     public function name($name)
     {
         $this->name = $name;
-
-        return $this;
-    }
-    public function params($params)
-    {
-        $this->params = $params;
 
         return $this;
     }
@@ -78,7 +102,7 @@ abstract class Filter
 
     public function isActive()
     {
-        if(is_array($this->value)) {
+        if (is_array($this->value)) {
             $value = array_filter($this->value);
             return count($value) ? true : false;
         }
@@ -90,7 +114,7 @@ abstract class Filter
     {
 
         return view('table::' . $this->theme . '.' . $this->viewPath, [
-            'name'  => $this->name,
+            'name' => $this->name,
             'label' => $this->label,
             'value' => $this->value
         ]);
