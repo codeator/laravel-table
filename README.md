@@ -52,9 +52,9 @@ class UsersTable extends Table
                     ->label('Роль'),
                 /*
                 You can specify settings for some of the filters.
-                Eg: price filter can take precision as the argument
+                Eg: range filter can take multiplier as the argument
                  */
-                'balance' => 'price|precision:4',
+                'balance' => 'range|multiplier:10000',
                 'count_maps' => 'range',
                 'count_folders' => 'range',
                 'count_objects' => 'range',
