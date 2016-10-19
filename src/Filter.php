@@ -67,9 +67,13 @@ abstract class Filter
         }
     }
 
-    public function __construct($name)
+    public function __construct($name, $label = null)
     {
         $this->name($name);
+        if ($label === null) {
+            $label = $name;
+        }
+        $this->label($label);
         $this->prepare();
     }
 

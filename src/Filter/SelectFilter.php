@@ -17,11 +17,6 @@ class SelectFilter extends Filter
     protected $options = [];
     protected $viewPath = 'filters.select';
 
-    public function __construct($name)
-    {
-        parent::__construct($name);
-    }
-
     public function applyFilter($model)
     {
         if ($this->value) {

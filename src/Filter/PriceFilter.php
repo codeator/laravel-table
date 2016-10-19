@@ -17,9 +17,9 @@ class PriceFilter extends Filter
     protected $viewPath = 'filters.price';
     protected $priceMultiplier = 100;
 
-    public function __construct($name, $precision, $multiplier = null)
+    public function __construct($name, $precision, $multiplier = null, $label = null)
     {
-        parent::__construct($name);
+        parent::__construct($name, $label);
         if ($precision !== null) {
             $this->priceMultiplier = 10 ** $precision;
         }
