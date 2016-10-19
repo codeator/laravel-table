@@ -34,20 +34,19 @@ abstract class Filter
         }
 
         $className = 'Codeator\Table\Filter\\' . ucfirst(camel_case($type . 'Filter'));
-        $params['name'] = $name;
 
-        $filter = self::createFilter($params, $className);
+        $filter = self::createFilter($name, $params, $className);
 
         return $filter;
     }
 
-    protected static function createFilter($params, $className)
+    protected static function createFilter($name, $params, $className)
     {
         $reflectionClass = new \ReflectionClass($className);
-        $preparedParams = [];
-        foreach ($reflectionClass->getConstructor()->getParameters() as $parameter) {
-            $preparedParams[$parameter->getName()] = self::exportParameterValue($params, $parameter);
-        }
+        $preparedParams = [
+            'name' => $name,
+            'params' => $params,
+        ];
         return $reflectionClass->newInstanceArgs($preparedParams);
     }
 
@@ -67,13 +66,13 @@ abstract class Filter
         }
     }
 
-    public function __construct($name, $label = null)
+    public function __construct($name, $params = [])
     {
         $this->name($name);
-        if ($label === null) {
-            $label = $name;
+        if (array_has($params, 'label')) {
+            $this->label(array_get($params, 'label'));
         }
-        $this->label($label);
+        $this->params($params);
         $this->prepare();
     }
 
@@ -84,6 +83,13 @@ abstract class Filter
     public function name($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function params($params)
+    {
+        $this->params = $params;
 
         return $this;
     }
