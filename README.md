@@ -151,3 +151,10 @@ class UsersController extends Controller
   text-decoration: none;
 }
 ```
+
+###Some recommendations for JS
+ 
+ Use [Flatpickr](https://chmln.github.io/flatpickr/) library for datepicker 
+```
+require('flatpickr')('[data-toggle=datepicker]');
+```
