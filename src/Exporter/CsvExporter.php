@@ -3,6 +3,7 @@
 namespace Codeator\Table\Exporter;
 
 use Codeator\Table\Exporter;
+use DB;
 
 /**
  * Created by PhpStorm.
