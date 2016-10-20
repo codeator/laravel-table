@@ -18,8 +18,8 @@ class Table
     private $sortables = [];
     private $filters = [];
     private $exporters = [];
+    private $batchActions = [];
     private $preparedFilters = [];
-    private $preparedExporters = [];
     private $model;
     private $theme;
     private $rows;
@@ -78,6 +78,12 @@ class Table
         return $this;
     }
 
+    public function batchActions($batchActions = [])
+    {
+        $this->batchActions = $batchActions;
+        return $this;
+    }
+
     public function orderBy($field, $direction = 'asc')
     {
         $this->orderField = $field;
@@ -97,7 +103,8 @@ class Table
     {
         $this->filterModelResults($this->model);
         $this->sortModelResults($this->model);
-        $this->prepareExporters($this->model);
+        $this->prepareExporters();
+        $this->runBatch();
 
         $result = $this->model->paginate($this->itemsPerPage);
         $this->rows = $result;
@@ -126,6 +133,22 @@ class Table
         $this->preparedFilters = $filters;
 
         return $filters;
+    }
+
+    protected function runBatch()
+    {
+        if (\Request::has('batch_action')) {
+            if ($action = array_get($this->batchActions, \Request::get('batch'))) {
+                $query = clone $this->model;
+                if (\Request::has('batch_with')) {
+                    $ids = \Request::get('b');
+                    $query->whereIn('id', $ids);
+                }
+                $action($query);
+                return redirect()->back()->send();
+            }
+        }
+        return $this;
     }
 
     protected function filterModelResults($model)
@@ -174,7 +197,8 @@ class Table
             'filters'          => $this->preparedFilters,
             'filtersAreActive' => $this->filtersAreActive,
             'exporters'        => $this->exporters,
-            'actions'          => $this->actions
+            'actions'          => $this->actions,
+            'batchActions'     => $this->batchActions
         ]);
     }
 

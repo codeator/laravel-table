@@ -60,6 +60,15 @@ class UsersTable extends Table
                 'count_objects' => 'range',
                 'created_at' => 'date'
             ])
+            /*
+            Group operations for query
+            Label for delete batch action is: trans('table::batch.labels.delete');
+            */
+            ->batchActions([
+                'delete' => function ($queryBuilder) {
+                    $queryBuilder->delete();
+                }
+            ])
             ->sortables([
                 'id'
             ])
