@@ -5,7 +5,7 @@ $link_limit = 10; // maximum number of links (a little bit inaccurate, but will 
 
 @if ($paginator->lastPage() > 1)
     <div class="col-xs-2" style="padding-top: 24px;">
-        {{($paginator->currentPage() - 1) * $paginator->perPage()}} - {{$paginator->currentPage() * $paginator->perPage()}} / {{$paginator->total()}}
+        {{($paginator->currentPage() - 1) * $paginator->perPage()}} - {{$paginator->currentPage() * $paginator->perPage()}} {{ trans('table::pagination.from') }} {{$paginator->total()}} {{ trans('table::pagination.records') }}
     </div>
     <div class="col-xs-8" style="text-align: center">
     <ul class="pagination">
