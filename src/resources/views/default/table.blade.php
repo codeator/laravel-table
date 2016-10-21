@@ -145,5 +145,5 @@
     </table>
 </div>
 <div class="table-pagination">
-    {{$pagination}}
+    @include('table::default.pagination', ['paginator' => $pagination])
 </div>

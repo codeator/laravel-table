@@ -108,7 +108,7 @@ class Table
 
         $result = $this->model->paginate($this->itemsPerPage);
         $this->rows = $result;
-        $this->pagination = $result->appends(\Request::input())->links();
+        $this->pagination = $result->appends(\Request::input());
     }
 
     protected function prepareExporters()
