@@ -12,7 +12,7 @@ $link_limit = 10; // maximum number of links (a little bit inaccurate, but will 
         <li class="{{ ($paginator->currentPage() == 1) ? ' disabled' : '' }}">
             <a href="{{ $paginator->url(1) }}">&laquo;&laquo;</a>
         </li>
-        @if ($paginator->onFirstPage())
+        @if ($paginator->currentPage() == 1)
             <li class="disabled"><a href="#">&laquo;</a></li>
         @else
             <li><a href="{{ $paginator->previousPageUrl() }}" rel="prev">&laquo;</a></li>
