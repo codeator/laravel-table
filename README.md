@@ -16,6 +16,10 @@ and to facades section
 
 ##Examples
 
+##Translations
+
+Soon
+
 ###Table class
 
 ```
