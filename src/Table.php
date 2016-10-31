@@ -17,6 +17,7 @@ class Table
     private $columns = [];
     private $sortables = [];
     private $filters = [];
+    private $filterCallback = null;
     private $exporters = [];
     private $batchActions = [];
     private $preparedFilters = [];
@@ -60,6 +61,13 @@ class Table
     public function filters($filters = [])
     {
         $this->filters = $filters;
+
+        return $this;
+    }
+
+    public function filterCallback($callback)
+    {
+        $this->filterCallback = $callback;
 
         return $this;
     }
@@ -135,6 +143,22 @@ class Table
         return $filters;
     }
 
+    protected function prepareQuery()
+    {
+        $filters = [];
+        foreach ($this->filters as $name => $type) {
+            $filter = Filter::make($type, $name);
+            $filter->label(array_get($this->columns, $name))
+                ->theme($this->theme);
+
+            $filters[] = $filter;
+        }
+
+        $this->preparedFilters = $filters;
+
+        return $filters;
+    }
+
     protected function runBatch()
     {
         if (\Request::has('batch_action')) {
@@ -159,6 +183,9 @@ class Table
             if ($filter->isActive()) {
                 $this->filtersAreActive = true;
             }
+        }
+        if (is_callable($callback = $this->filterCallback)) {
+            $this->model = call_user_func($callback, $this->model);
         }
     }
 

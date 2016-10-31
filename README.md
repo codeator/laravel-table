@@ -65,6 +65,18 @@ class UsersTable extends Table
                 'created_at' => 'date'
             ])
             /*
+            Sometimes you need to filter results without input
+            If User with moderation role can't view admin users
+            */
+            ->filterCallback(function($model) {
+                if (auth()->user() && auth()->user()->role->type == Role::TYPE_MODERATOR) {
+                    $model = $model->whereHas('role', function($query) {
+                        $query->where('type', '<>', Role::TYPE_ADMIN);
+                    });
+                }
+                return $model;
+            })
+            /*
             Group operations for query
             Label for delete batch action is: trans('table::batch.labels.delete');
             */
