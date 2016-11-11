@@ -17,10 +17,10 @@ class Table
     private $columns = [];
     private $sortables = [];
     private $filters = [];
+    private $preparedFilters = [];
     private $filterCallback = null;
     private $exporters = [];
     private $batchActions = [];
-    private $preparedFilters = [];
     private $model;
     private $theme;
     private $rows;
@@ -31,6 +31,8 @@ class Table
     private $orderDirection = 'asc';
     private $filtersAreActive = false;
     private $actions = [];
+    private $totals = [];
+    private $preparedTotals = [];
 
     public static function from($model)
     {
@@ -86,9 +88,17 @@ class Table
         return $this;
     }
 
+    public function totals($totals = [])
+    {
+        $this->totals = $totals;
+
+        return $this;
+    }
+
     public function batchActions($batchActions = [])
     {
         $this->batchActions = $batchActions;
+
         return $this;
     }
 
@@ -113,6 +123,7 @@ class Table
         $this->sortModelResults($this->model);
         $this->prepareExporters();
         $this->runBatch();
+        $this->prepareTotals($this->model);
 
         $result = $this->model->paginate($this->itemsPerPage);
         $this->rows = $result;
@@ -143,6 +154,22 @@ class Table
         return $filters;
     }
 
+    protected function prepareTotals()
+    {
+        $totals = [];
+        foreach ($this->totals as $name => $type) {
+            $total = Total::make($type, $name);
+            $totals[$name] = [
+                'total' => $total->get($this->model),
+                'type' => $type
+            ];
+        }
+
+        $this->preparedTotals = $totals;
+
+        return $totals;
+    }
+
     protected function prepareQuery()
     {
         $filters = [];
@@ -169,9 +196,11 @@ class Table
                     $query->whereIn('id', $ids);
                 }
                 $action($query);
+
                 return redirect()->back()->send();
             }
         }
+
         return $this;
     }
 
@@ -225,7 +254,8 @@ class Table
             'filtersAreActive' => $this->filtersAreActive,
             'exporters'        => $this->exporters,
             'actions'          => $this->actions,
-            'batchActions'     => $this->batchActions
+            'batchActions'     => $this->batchActions,
+            'totals'           => $this->preparedTotals
         ]);
     }
 

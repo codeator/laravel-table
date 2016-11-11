@@ -5,7 +5,7 @@
         </td>
     @endif
     @foreach($columns as $key => $column)
-        <td>
+        <td @if($orderField == $key) class="ctable-ordered" @endif>
             {{array_get($rowData, $key)}}
         </td>
     @endforeach

@@ -40,10 +40,10 @@ class UsersTable extends Table
         $table = self::from(new User())
             ->columns([
                 'id' => 'Id',
-                'name' => 'Имя',
+                'name' => 'Name',
                 'email' => 'Email',
-                'balance' => 'Баланс',
-                'created_at' => 'Регистрация'
+                'balance' => 'Balance',
+                'created_at' => 'Created at'
             ])
             /*
             For filters allowed types: string, range, date
@@ -53,16 +53,20 @@ class UsersTable extends Table
                 'email' => 'string',
                 'role_id' => (new SelectFilter('role_id'))
                     ->options($roles)
-                    ->label('Роль'),
+                    ->label('Role'),
                 /*
                 You can specify settings for some of the filters.
                 Eg: range filter can take multiplier as the argument
                  */
-                'balance' => 'range|multiplier:10000',
-                'count_maps' => 'range',
-                'count_folders' => 'range',
-                'count_objects' => 'range',
+                'balance' => 'range|multiplier:10000',                
                 'created_at' => 'date'
+            ])
+            /*
+            For totals allowed types: sum, count
+            */
+            ->totals([
+                'balance' => 'sum',
+                'id' => 'count'
             ])
             /*
             Sometimes you need to filter results without input
@@ -142,38 +146,62 @@ class UsersController extends Controller
 ###Sample Sass based on bootstrap v4
 
 ```
-.table-filter {
-  margin-bottom: 20px;
+.table {
+  tbody {
+    .ctable-total-content {
+      border: none;
+      background-color: transparent !important;
 
-  .form-group {
-    width: 25%;
-    padding-left: 15px;
-    padding-right: 15px;
-    float: left;
-
-    .col-xs-6 {
-      &:first-of-type {
-        padding-right: 5px;
+      td {
+        border: none;
+        background-color: transparent;
+        font-size: 80%;
+        padding-top: 0;
       }
+    }
 
-      &:last-of-type {
-        padding-left: 5px;
+    .ctable-total-heading {
+      border: none;
+      background-color: transparent !important;
+
+      td {
+        border: none;
+        background-color: transparent;
+        font-size: 80%;
+        font-weight: bold;
+      }
+    }
+
+    tr:nth-of-type(even) {
+      td.ctable-ordered {
+        background-color: rgba(0, 0, 0, 0.10);
+      }
+    }
+
+    tr:nth-of-type(odd) {
+      td.ctable-ordered {
+        background-color: rgba(0, 0, 0, 0.17);
       }
     }
   }
-}
 
-//For use with materialdesignicons.com
-.table-arrow-up:before {
-  font: normal normal normal 16px/1 "Material Design Icons";
-  content: mdi('arrow-up');
-  text-decoration: none;
-}
+  thead {
+    a {
+      text-decoration: none;
+    }
+  }
 
-.table-arrow-down:before {
-  font: normal normal normal 16px/1 "Material Design Icons";
-  content: mdi('arrow-down');
-  text-decoration: none;
+  .table-arrow-up:before {
+    font: normal normal normal 16px/1 "Material Design Icons";
+    content: mdi('arrow-up');
+    text-decoration: none;
+  }
+
+  .table-arrow-down:before {
+    font: normal normal normal 16px/1 "Material Design Icons";
+    content: mdi('arrow-down');
+    text-decoration: none;
+  }
 }
 ```
 

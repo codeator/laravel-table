@@ -112,8 +112,10 @@
                                 {{$column}}
                                 @if($orderDirection == 'asc')
                                     <span class="table-arrow-up"></span>
+                                    <span class="table-arrow-down" style="visibility: hidden;"></span>
                                 @else
                                     <span class="table-arrow-down"></span>
+                                    <span class="table-arrow-up" style="visibility: hidden;"></span>
                                 @endif
                             </a>
                         @else
@@ -138,9 +140,46 @@
                 'data' => $rowData,
                 'columns' => $columns,
                 'actions' => $actions,
+                'orderField' => $orderField,
                 'hasBatchActions' => !empty($batchActions)
             ])
         @endforeach
+        @if(count($totals))
+            <tr class="ctable-total-heading">
+                @if (!empty($batchActions))
+
+                @endif
+                @foreach($columns as $key => $column)
+                    <td>
+                        @if(array_get($totals, $key))
+                        {{$column}}&nbsp;{{trans('table::total.'.array_get($totals, $key.'.type'))}}
+                        @endif
+                    </td>
+                @endforeach
+                @if(count($actions))
+                    <td>
+
+                    </td>
+                @endif
+            </tr>
+            <tr class="ctable-total-content">
+                @if (!empty($batchActions))
+                    <td>
+
+                    </td>
+                @endif
+                @foreach($columns as $key => $column)
+                    <td>
+                        {{array_get($totals, $key.'.total')}}
+                    </td>
+                @endforeach
+                @if(count($actions))
+                    <td>
+
+                    </td>
+                @endif
+            </tr>
+        @endif
         </tbody>
     </table>
 </div>
