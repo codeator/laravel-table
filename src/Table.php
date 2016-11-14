@@ -160,7 +160,7 @@ class Table
         foreach ($this->totals as $name => $type) {
             $total = Total::make($type, $name);
             $totals[$name] = [
-                'total' => $total->get($this->model),
+                'total' => $total->get(clone $this->model),
                 'type' => $type
             ];
         }
