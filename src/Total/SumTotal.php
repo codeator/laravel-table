@@ -15,6 +15,6 @@ class SumTotal extends Total
 {
     public function get($model)
     {
-        return $model->select(DB::raw('SUM(' . $this->column . ') as total'))->first()->total;
+        return $model->select(DB::raw('SUM(' . $model->getModel()->getTable().'.'.$this->column . ') as total'))->first()->total;
     }
 }
