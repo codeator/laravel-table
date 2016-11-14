@@ -20,7 +20,7 @@ class SelectFilter extends Filter
     public function applyFilter($model)
     {
         if ($this->value) {
-            $model = $model->where($model->getTable().'.'.$this->name, $this->value);
+            $model = $model->where($model->getModel()->getTable().'.'.$this->name, $this->value);
         }
         return $model;
     }

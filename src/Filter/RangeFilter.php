@@ -34,11 +34,11 @@ class RangeFilter extends Filter
     public function applyFilter($model) {
 
         if($from = array_get($this->value, 'from')) {
-            $model = $model->where($model->getTable().'.'.$this->name, '>=', $from * $this->multiplier);
+            $model = $model->where($model->getModel()->getTable().'.'.$this->name, '>=', $from * $this->multiplier);
         }
 
         if($to = array_get($this->value, 'to')) {
-            $model = $model->where($model->getTable().'.'.$this->name, '<=', $to * $this->multiplier);
+            $model = $model->where($model->getModel()->getTable().'.'.$this->name, '<=', $to * $this->multiplier);
         }
 
         return $model;

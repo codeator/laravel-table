@@ -25,7 +25,7 @@ class StringFilter extends Filter
     public function applyFilter($model)
     {
         if($this->value) {
-            $model = $model->where($model->getTable().'.'.$this->name, 'like', '%' . $this->value . '%');
+            $model = $model->where($model->getModel()->getTable().'.'.$this->name, 'like', '%' . $this->value . '%');
         }
         return $model;
     }
