@@ -161,7 +161,7 @@ class Table
             $total = Total::make($type, $name);
             $totals[$name] = [
                 'total' => $total->get(clone $this->model),
-                'type' => $type
+                'type' => $total->getType()
             ];
         }
 
