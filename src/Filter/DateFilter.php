@@ -26,11 +26,11 @@ class DateFilter extends Filter
     public function applyFilter($model)
     {
         if ($from = array_get($this->value, 'from')) {
-            $model = $model->where(DB::raw('DATE_FORMAT('.$this->name.', "%Y-%m-%d")'), '>=', date('Y-m-d', strtotime($from)));
+            $model = $model->where(DB::raw('DATE_FORMAT('.$model->getTable().'.'.$this->name.', "%Y-%m-%d")'), '>=', date('Y-m-d', strtotime($from)));
         }
 
         if ($to = array_get($this->value, 'to')) {
-            $model = $model->where(DB::raw('DATE_FORMAT('.$this->name.', "%Y-%m-%d")'), '<=', date('Y-m-d', strtotime($to)));
+            $model = $model->where(DB::raw('DATE_FORMAT('.$model->getTable().'.'.$this->name.', "%Y-%m-%d")'), '<=', date('Y-m-d', strtotime($to)));
         }
 
         return $model;
