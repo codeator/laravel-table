@@ -50,7 +50,10 @@ class UsersTable extends Table
             */
             ->filters([
                 'name' => 'string',
-                'email' => 'string',
+                /*
+                String filter can be strict (key=value) or not (key like %value%)
+                */
+                'email' => 'string|strict:true',
                 'role_id' => (new SelectFilter('role_id'))
                     ->options($roles)
                     ->label('Role'),
