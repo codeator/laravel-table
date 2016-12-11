@@ -220,9 +220,9 @@ class Table
 
     protected function sortModelResults($model)
     {
-        $model = $model->orderBy($this->orderField, $this->orderDirection);
+        $this->model = $model->orderBy($this->orderField, $this->orderDirection);
 
-        return $model;
+        return $this->model;
     }
 
     public function row($viewPath)
